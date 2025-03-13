@@ -1,0 +1,14 @@
+
+__pycache__/
+*.pyc
+*.pyo
+.idea
+
+
+.env
+.venv/
+.poetry/
+
+
+logs/
+*.log
