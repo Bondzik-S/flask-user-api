@@ -8,15 +8,15 @@ load_dotenv()
 
 def get_database_host() -> str:
     """Get database host based on environment.
-    
+
     If running in Docker (container environment), use 'db' as host.
     Otherwise, use 'localhost' for local development.
-    
+
     Returns:
         str: Database host name
     """
     # Check if running in Docker container
-    if os.path.exists('/.dockerenv'):
+    if os.path.exists("/.dockerenv"):
         return os.getenv("POSTGRES_HOST", "db")
     return os.getenv("POSTGRES_HOST", "localhost")
 
