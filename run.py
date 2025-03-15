@@ -1,3 +1,5 @@
+"""Entry point for Flask User API."""
+
 from flask_user_api import create_app
 
 
