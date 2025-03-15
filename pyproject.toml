@@ -1,38 +1,66 @@
-[project]
+[tool.poetry]
 name = "flask_user_api"
 version = "0.1.0"
 description = ""
-authors = [
-    {name = "Bondzik-S",email = "bondziks@gmail.com"}
-]
-readme = "README.md"
-requires-python = ">=3.12,<4.0"
-dependencies = [
-    "flask (>=3.1.0,<4.0.0)",
-    "flask-sqlalchemy (>=3.1.1,<4.0.0)",
-    "flask-marshmallow (>=1.3.0,<2.0.0)",
-    "flask-migrate (>=4.1.0,<5.0.0)",
-    "psycopg2-binary (>=2.9.10,<3.0.0)",
-    "flask-swagger-ui (>=4.11.1,<5.0.0)",
-    "python-dotenv (>=1.0.1,<2.0.0)",
-    "docker (>=7.1.0,<8.0.0)",
-    "marshmallow-sqlalchemy (>=1.4.1,<2.0.0)",
-    "flask-cors (>=5.0.1,<6.0.0)",
-    "gunicorn (>=23.0.0,<24.0.0)"
-]
+authors = ["Bondzik-S <bondziks@gmail.com>"]
+packages = [{include = "flask_user_api"}]
 
+[tool.poetry.dependencies]
+python = ">=3.12,<4.0"
+flask = ">=3.1.0,<4.0.0"
+flask-sqlalchemy = ">=3.1.1,<4.0.0"
+flask-marshmallow = ">=1.3.0,<2.0.0"
+flask-migrate = ">=4.1.0,<5.0.0"
+psycopg2-binary = ">=2.9.10,<3.0.0"
+flask-swagger-ui = ">=4.11.1,<5.0.0"
+python-dotenv = ">=1.0.1,<2.0.0"
+docker = ">=7.1.0,<8.0.0"
+marshmallow-sqlalchemy = ">=1.4.1,<2.0.0"
+flask-cors = ">=5.0.1,<6.0.0"
+gunicorn = ">=23.0.0,<24.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+pytest-flask = "^1.3.0"
+ruff = "^0.11.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.ruff]
+target-version = "py312"
+line-length = 100
 
-[tool.poetry]
-packages = [
-    { include = "flask_user_api" }
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+    "UP",  # pyupgrade
+    "ANN",  # flake8-annotations
+    "D",  # pydocstyle
+    "T",  # flake8-print
+    "Q",  # flake8-quotes
+]
+ignore = [
+    "D203",  # one-blank-line-before-class
+    "D212",  # multi-line-summary-first-line
+    "D104",  # missing-public-package-docstring
+    "D200",  # one-line-docstring-should-fit-on-one-line
+    "I001",  # unsorted-imports
 ]
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.3.5"
-pytest-flask = "^1.3.0"
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["ANN", "D"]
+"migrations/*" = ["ANN", "D", "Q"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+known-first-party = ["flask_user_api"]
 
