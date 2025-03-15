@@ -1,21 +1,31 @@
 FROM python:3.12-slim
 
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libpq-dev \
+    netcat-traditional \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir poetry
+
 WORKDIR /app
 
-# Копіюємо файли проекту в контейнер
-COPY pyproject.toml poetry.lock /app/
+COPY pyproject.toml poetry.lock ./
 
-# Встановлюємо залежності через Poetry
-RUN pip install --upgrade pip \
-    && pip install poetry \
-    && poetry install --no-interaction --no-ansi --no-root \
-    && poetry add gunicorn  # Додаємо gunicorn
+RUN poetry config virtualenvs.create false && \
+    poetry install --no-interaction --no-ansi --no-root
 
-COPY . /app
+COPY . .
 
-# Створення користувача та зміна власника
-RUN adduser -u 5678 --disabled-password --gecos "" appuser \
-    && chown -R appuser /app
+RUN poetry install --no-interaction --no-ansi
 
-# Команда запуску
-CMD ["python", "run.py"]
+ENV FLASK_APP=run.py
+ENV FLASK_ENV=production
+
+RUN adduser --disabled-password --gecos "" appuser && chown -R appuser:appuser /app
+USER appuser
+
+CMD while ! nc -z $POSTGRES_HOST $POSTGRES_PORT; do sleep 0.1; done && \
+    flask db upgrade && \
+    flask run --host=0.0.0.0
